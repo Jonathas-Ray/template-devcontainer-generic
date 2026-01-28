@@ -1,65 +1,136 @@
 version: "3.9"
-name: projeto-containerizado
 
 services:
-  dev:
-    build: .
-    volumes:
-      - .:/workspace
-    command: sleep infinity
-    depends_on:
-      - mysql
-    ports:
-      - "3000:3000"
-      - "8000:8000"
+  # ==================================================
+  # Containers de desenvolvimento por linguagem
+  # ==================================================
 
+  # dev-python:
+  #   build:
+  #     context: ./python
+  #     dockerfile: Dockerfile
+  #     platform: linux/arm64
+  #   volumes:
+  #     - ./workspace:/workspace
+  #     - python-packages:/root/.local/lib/python3.11/site-packages
+  #   environment:
+  #     DB_HOST: mysql
+  #     DB_USER: ${MYSQL_USER}
+  #     DB_PASSWORD: ${MYSQL_PASSWORD}
+  #     DB_NAME: ${MYSQL_DATABASE}
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy
+  #   networks:
+  #     - dev-network
+  #   command: sleep infinity
+  #   ports:
+  #     - "3000:3000"
+
+  # dev-java:
+  #   build:
+  #     context: ./java
+  #     dockerfile: Dockerfile
+  #     platform: linux/arm64
+  #   volumes:
+  #     - ./workspace:/workspace
+  #     - java-libs:/usr/local/lib/java
+  #   environment:
+  #     DB_HOST: mysql
+  #     DB_USER: ${MYSQL_USER}
+  #     DB_PASSWORD: ${MYSQL_PASSWORD}
+  #     DB_NAME: ${MYSQL_DATABASE}
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy
+  #   networks:
+  #     - dev-network
+  #   command: sleep infinity
+
+  # dev-node:
+  #   build:
+  #     context: ./node
+  #     dockerfile: Dockerfile
+  #     platform: linux/arm64
+  #   volumes:
+  #     - ./workspace:/workspace
+  #     - node-modules:/workspace/node_modules
+  #   environment:
+  #     DB_HOST: mysql
+  #     DB_USER: ${MYSQL_USER}
+  #     DB_PASSWORD: ${MYSQL_PASSWORD}
+  #     DB_NAME: ${MYSQL_DATABASE}
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy
+  #   networks:
+  #     - dev-network
+  #   command: sleep infinity
+  #   ports:
+  #     - "8000:8000"
+
+  # dev-cpp:
+  #   build:
+  #     context: ./cpp
+  #     dockerfile: Dockerfile
+  #     platform: linux/arm64
+  #   volumes:
+  #     - ./workspace:/workspace
+  #     - cpp-libs:/usr/local/lib/arduino
+  #   environment:
+  #     DB_HOST: mysql
+  #     DB_USER: ${MYSQL_USER}
+  #     DB_PASSWORD: ${MYSQL_PASSWORD}
+  #     DB_NAME: ${MYSQL_DATABASE}
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy
+  #   networks:
+  #     - dev-network
+  #   command: sleep infinity
+
+  # ==================================================
+  # Banco MySQL único ARM64
+  # ==================================================
   mysql:
-    image: mysql:8.0
-    restart: unless-stopped
+    image: ubuntu:24.04
+    platform: linux/arm64
+    container_name: mysql
+    networks:
+      - dev-network
+    volumes:
+      - mysql-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    command:
-      --character-set-server=utf8mb4
-      --collation-server=utf8mb4_unicode_ci
-    # ports:
-    #   - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
+    command: >
+      bash -c "
+      apt update &&
+      apt install -y mysql-server &&
+      service mysql start &&
+      tail -f /dev/null
+      "
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      retries: 10
+      timeout: 5s
+      start_period: 10s
 
-  # dev-python:
-  #   build: ./python
-  #   volumes:
-  #     - .:/workspace
-  #     - python-packages:/root/.local/lib/python3.11/site-packages
-  #   command: sleep infinity
-
-  # dev-java:
-  #   build: ./java
-  #   volumes:
-  #     - .:/workspace
-  #     - java-packages:/usr/local/lib/java
-  #   command: sleep infinity
-
-  # dev-node:
-  #   build: ./node
-  #   volumes:
-  #     - .:/workspace
-  #     - node-modules:/workspace/node_modules
-  #   command: sleep infinity
-
-  # dev-cpp:
-  #   build: ./cpp
-  #   volumes:
-  #     - .:/workspace
-  #     - cpp-packages:/usr/local/lib/arduino
-  #   command: sleep infinity
-
+# ==================================================
+# Volumes para persistência de libs e dados
+# ==================================================
 volumes:
-  mysql-data:
   # python-packages:
-  # java-packages:
+  # java-libs:
   # node-modules:
-  # cpp-packages:
+  # cpp-libs:
+  mysql-data:
+
+# ==================================================
+# Rede compartilhada para containers de dev + MySQL
+# ==================================================
+networks:
+  dev-network:
