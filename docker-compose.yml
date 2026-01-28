@@ -21,13 +21,45 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      #ports:
-      #  - "3306:3306"
     command:
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
+    # ports:
+    #   - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
 
+  # dev-python:
+  #   build: ./python
+  #   volumes:
+  #     - .:/workspace
+  #     - python-packages:/root/.local/lib/python3.11/site-packages
+  #   command: sleep infinity
+
+  # dev-java:
+  #   build: ./java
+  #   volumes:
+  #     - .:/workspace
+  #     - java-packages:/usr/local/lib/java
+  #   command: sleep infinity
+
+  # dev-node:
+  #   build: ./node
+  #   volumes:
+  #     - .:/workspace
+  #     - node-modules:/workspace/node_modules
+  #   command: sleep infinity
+
+  # dev-cpp:
+  #   build: ./cpp
+  #   volumes:
+  #     - .:/workspace
+  #     - cpp-packages:/usr/local/lib/arduino
+  #   command: sleep infinity
+
 volumes:
   mysql-data:
+  # python-packages:
+  # java-packages:
+  # node-modules:
+  # cpp-packages:
