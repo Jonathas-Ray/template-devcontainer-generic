@@ -1,1 +1,1 @@
-.
+Esse é um Template de Container com linguagens e Banco, apague as pastas das linguagens que não for usar e descomente o que for usar no arquivo Docker-Compose.yml. Feito isso e instalado o Docker e o Dev Containers no VS Code execute um ***"reopen in Container"*** e usar, há espaços para guardar eventuais alterações nas linguagens como o download de bibliotecas ***mas não de alterações feitas no VS Code como o incremento de Extensões*** para esse caso você deve buscar o arquivo ***.devcontainer.json*** e alterá-lo colocando-os na lista de extensões.
