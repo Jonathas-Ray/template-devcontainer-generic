@@ -1,0 +1,19 @@
+{
+  "name": "C/C++ Dev Container",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "dev-cpp",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "vscjava.vscode-java-debug",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "github.vscode-pull-request-github",
+        "DotJoshJohnson.dotenv"
+      ]
+    }
+  }
+}

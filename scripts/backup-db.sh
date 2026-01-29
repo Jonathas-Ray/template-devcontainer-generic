@@ -1,20 +1,19 @@
 #!/bin/bash
+DB_HOST=${DB_HOST:-mysql}
+DB_USER=${DB_USER:-app_user}
+DB_PASSWORD=${DB_PASSWORD:-app_pass}
+DB_NAME=${DB_NAME:-app_db}
 
-set -e
+# Pasta onde os backups vão ficar (host)
+BACKUP_DIR=/workspace/backups
 
-TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
-BACKUP_DIR="/workspace/backups"
-FILENAME="backup_${MYSQL_DATABASE}_${TIMESTAMP}.sql"
+mkdir -p $BACKUP_DIR
 
-echo "📦 Iniciando backup do banco..."
+docker exec -i mysql \
+  mysqldump -u$DB_USER -p$DB_PASSWORD $DB_NAME > $BACKUP_DIR/backup_$(date +%Y%m%d_%H%M%S).sql
 
-docker exec \
-  $(docker compose ps -q mysql) \
-  mysqldump \
-    -u"$MYSQL_USER" \
-    -p"$MYSQL_PASSWORD" \
-    "$MYSQL_DATABASE" \
-  > "$BACKUP_DIR/$FILENAME"
+echo "Backup gerado em $BACKUP_DIR"
 
-echo "✅ Backup concluído:"
-echo "   $BACKUP_DIR/$FILENAME"
+
+
+# Certifique-se de que estas variáveis existem no .env

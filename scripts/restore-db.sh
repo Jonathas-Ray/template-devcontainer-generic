@@ -1,27 +1,18 @@
 #!/bin/bash
 
-set -e
-
-if [ -z "$1" ]; then
-  echo "❌ Informe o arquivo de backup:"
-  echo "   ./scripts/restore-db.sh backups/arquivo.sql"
-  exit 1
-fi
+DB_HOST=${DB_HOST:-mysql}
+DB_USER=${DB_USER:-app_user}
+DB_PASSWORD=${DB_PASSWORD:-app_pass}
+DB_NAME=${DB_NAME:-app_db}
 
 BACKUP_FILE=$1
 
-if [ ! -f "$BACKUP_FILE" ]; then
-  echo "❌ Arquivo não encontrado: $BACKUP_FILE"
+if [ -z "$BACKUP_FILE" ]; then
+  echo "Uso: ./restore.sh <caminho_do_backup.sql>"
   exit 1
 fi
 
-echo "♻️ Restaurando banco..."
+docker exec -i mysql \
+  mysql -u$DB_USER -p$DB_PASSWORD $DB_NAME < $BACKUP_FILE
 
-cat "$BACKUP_FILE" | docker exec -i \
-  $(docker compose ps -q mysql) \
-  mysql \
-    -u"$MYSQL_USER" \
-    -p"$MYSQL_PASSWORD" \
-    "$MYSQL_DATABASE"
-
-echo "✅ Restauração concluída"
+echo "Backup restaurado de $BACKUP_FILE"

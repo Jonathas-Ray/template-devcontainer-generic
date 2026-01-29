@@ -1,0 +1,17 @@
+{
+  "name": "Node Dev Container",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "dev-node",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "github.vscode-pull-request-github",
+        "DotJoshJohnson.dotenv"
+      ]
+    }
+  }
+}

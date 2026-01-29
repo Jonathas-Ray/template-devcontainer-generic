@@ -1,9 +1,39 @@
 version: "3.9"
 
 services:
-  # ==================================================
-  # Containers de desenvolvimento por linguagem
-  # ==================================================
+  # ==========================
+  # Banco MySQL
+  # ==========================
+  mysql:
+    image: ubuntu:24.04
+    platform: linux/arm64
+    container_name: mysql
+    networks:
+      - dev-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    command: >
+      bash -c "
+      apt update &&
+      apt install -y mysql-server &&
+      service mysql start &&
+      tail -f /dev/null
+      "
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      retries: 10
+      timeout: 5s
+      start_period: 10s
+
+  # ==========================
+  # Containers de Linguagem
+  # ==========================
 
   # dev-python:
   #   build:
@@ -89,39 +119,9 @@ services:
   #     - dev-network
   #   command: sleep infinity
 
-  # ==================================================
-  # Banco MySQL único ARM64
-  # ==================================================
-  mysql:
-    image: ubuntu:24.04
-    platform: linux/arm64
-    container_name: mysql
-    networks:
-      - dev-network
-    volumes:
-      - mysql-data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    command: >
-      bash -c "
-      apt update &&
-      apt install -y mysql-server &&
-      service mysql start &&
-      tail -f /dev/null
-      "
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 5s
-      retries: 10
-      timeout: 5s
-      start_period: 10s
-
-# ==================================================
-# Volumes para persistência de libs e dados
-# ==================================================
+# ==========================
+# Volumes persistentes
+# ==========================
 volumes:
   # python-packages:
   # java-libs:
@@ -129,8 +129,8 @@ volumes:
   # cpp-libs:
   mysql-data:
 
-# ==================================================
-# Rede compartilhada para containers de dev + MySQL
-# ==================================================
+# ==========================
+# Rede compartilhada
+# ==========================
 networks:
   dev-network:
