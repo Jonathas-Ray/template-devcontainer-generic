@@ -1,14 +1,14 @@
 {
-  "name": "Python Dev Container",
+  "name": "Vue 3 + Vite + JavaScript Dev Container",
   "dockerComposeFile": "../docker-compose.yml",
-  "service": "dev-python",
+  "service": "dev-vue-js",
   "workspaceFolder": "/workspace",
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "ms-python.debugpy",
+        "Vue.volar",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
         "ms-azuretools.vscode-docker",
         "redhat.vscode-yaml",
         "github.vscode-pull-request-github",

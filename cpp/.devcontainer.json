@@ -1,5 +1,5 @@
 {
-  "name": "C/C++ Dev Container",
+  "name": "C/C++ + PlatformIO Dev Container",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "dev-cpp",
   "workspaceFolder": "/workspace",
@@ -8,11 +8,11 @@
       "extensions": [
         "ms-vscode.cpptools",
         "ms-vscode.cmake-tools",
-        "vscjava.vscode-java-debug",
+        "platformio.platformio-ide",
         "ms-azuretools.vscode-docker",
         "redhat.vscode-yaml",
         "github.vscode-pull-request-github",
-        "DotJoshJohnson.dotenv"
+        "mikestead.dotenv"
       ]
     }
   }

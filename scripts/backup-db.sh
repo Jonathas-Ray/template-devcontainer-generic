@@ -1,19 +1,39 @@
 #!/bin/bash
-DB_HOST=${DB_HOST:-mysql}
-DB_USER=${DB_USER:-app_user}
-DB_PASSWORD=${DB_PASSWORD:-app_pass}
-DB_NAME=${DB_NAME:-app_db}
+# Uso: ./scripts/backup-db.sh [mysql|postgres|mongodb]
+# Padrão: mysql
 
-# Pasta onde os backups vão ficar (host)
-BACKUP_DIR=/workspace/backups
+set -e
 
-mkdir -p $BACKUP_DIR
+ENGINE=${1:-mysql}
+BACKUP_DIR="$(dirname "$0")/../backups"
+mkdir -p "$BACKUP_DIR"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-docker exec -i mysql \
-  mysqldump -u$DB_USER -p$DB_PASSWORD $DB_NAME > $BACKUP_DIR/backup_$(date +%Y%m%d_%H%M%S).sql
-
-echo "Backup gerado em $BACKUP_DIR"
-
-
-
-# Certifique-se de que estas variáveis existem no .env
+case "$ENGINE" in
+  mysql)
+    docker exec mysql \
+      mysqldump -u"${MYSQL_USER:-app_user}" -p"${MYSQL_PASSWORD:-app_pass}" \
+      "${MYSQL_DATABASE:-app_db}" \
+      > "$BACKUP_DIR/mysql_backup_$TIMESTAMP.sql"
+    echo "Backup MySQL gerado em $BACKUP_DIR/mysql_backup_$TIMESTAMP.sql"
+    ;;
+  postgres)
+    docker exec -e PGPASSWORD="${POSTGRES_PASSWORD:-app_pass}" postgres \
+      pg_dump -U "${POSTGRES_USER:-app_user}" "${POSTGRES_DB:-app_db}" \
+      > "$BACKUP_DIR/postgres_backup_$TIMESTAMP.sql"
+    echo "Backup PostgreSQL gerado em $BACKUP_DIR/postgres_backup_$TIMESTAMP.sql"
+    ;;
+  mongodb)
+    docker exec mongodb \
+      mongodump --username "${MONGO_USER:-app_user}" \
+                --password "${MONGO_PASSWORD:-app_pass}" \
+                --db "${MONGO_DB:-app_db}" \
+                --archive \
+      > "$BACKUP_DIR/mongo_backup_$TIMESTAMP.archive"
+    echo "Backup MongoDB gerado em $BACKUP_DIR/mongo_backup_$TIMESTAMP.archive"
+    ;;
+  *)
+    echo "Engine desconhecida: $ENGINE. Use: mysql | postgres | mongodb"
+    exit 1
+    ;;
+esac

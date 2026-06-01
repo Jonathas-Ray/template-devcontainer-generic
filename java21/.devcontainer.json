@@ -1,17 +1,21 @@
 {
-  "name": "Java Dev Container",
+  "name": "Java 21 + Spring Dev Container",
   "dockerComposeFile": "../docker-compose.yml",
-  "service": "dev-java",
+  "service": "dev-java21",
   "workspaceFolder": "/workspace",
   "customizations": {
     "vscode": {
       "extensions": [
         "redhat.java",
         "vscjava.vscode-java-debug",
+        "vscjava.vscode-java-test",
+        "vscjava.vscode-maven",
+        "vmware.vscode-spring-boot",
+        "vscjava.vscode-spring-initializr",
         "ms-azuretools.vscode-docker",
         "redhat.vscode-yaml",
         "github.vscode-pull-request-github",
-        "DotJoshJohnson.dotenv"
+        "mikestead.dotenv"
       ]
     }
   }
