@@ -15,7 +15,7 @@ if [ ! -f /workspace/pom.xml ]; then
     -d name=app \
     -d packageName=com.example.app \
     -d packaging=jar \
-    -d dependencies=web,data-jpa,lombok,devtools \
+    -d dependencies=web,data-jpa,lombok,devtools,h2 \ #Vai servir pra testar o código sem banco
     | tar -xz -C /workspace --strip-components=1
 
   echo "Scaffold criado em /workspace."
