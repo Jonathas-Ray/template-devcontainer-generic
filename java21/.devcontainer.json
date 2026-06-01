@@ -3,6 +3,7 @@
   "dockerComposeFile": "../docker-compose.yml",
   "service": "dev-java21",
   "workspaceFolder": "/workspace",
+  "runServices": ["dev-java21"],
   "customizations": {
     "vscode": {
       "extensions": [
