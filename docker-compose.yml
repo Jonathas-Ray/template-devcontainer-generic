@@ -93,7 +93,7 @@ services:
   #       condition: service_healthy
   #   networks:
   #     - dev-network
-  #   command: sleep infinity
+  #   # command removido: ENTRYPOINT do Dockerfile já gerencia o ciclo de vida
 
   # ==========================
   # C/C++ + PlatformIO
@@ -108,7 +108,7 @@ services:
   #     - cpp-platformio:/root/.platformio
   #   networks:
   #     - dev-network
-  #   command: sleep infinity
+  #   # command removido: ENTRYPOINT do Dockerfile já gerencia o ciclo de vida
 
   # ==========================
   # Java 17 + Spring
@@ -131,7 +131,7 @@ services:
   #       condition: service_healthy
   #   networks:
   #     - dev-network
-  #   command: sleep infinity
+  #   # command removido: ENTRYPOINT do Dockerfile já gerencia o ciclo de vida
   #   ports:
   #     - "8080:8080"
 
@@ -156,7 +156,7 @@ services:
   #       condition: service_healthy
   #   networks:
   #     - dev-network
-  #   command: sleep infinity
+  #   # command removido: ENTRYPOINT do Dockerfile já gerencia o ciclo de vida
   #   ports:
   #     - "8080:8080"
 

@@ -17,9 +17,10 @@ RUN curl -fsSL https://downloads.apache.org/maven/maven-3/3.9.9/binaries/apache-
     | tar -xz -C /opt && \
     ln -s /opt/apache-maven-3.9.9/bin/mvn /usr/local/bin/mvn
 
-# Instala Spring Boot CLI via SDKMAN
-RUN curl -s "https://get.sdkman.io" | bash && \
-    bash -c "source /root/.sdkman/bin/sdkman-init.sh && sdk install springboot"
-
 ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-ENV PATH="$JAVA_HOME/bin:/root/.sdkman/candidates/springboot/current/bin:$PATH"
+ENV PATH="$JAVA_HOME/bin:$PATH"
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

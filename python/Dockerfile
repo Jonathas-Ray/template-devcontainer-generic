@@ -13,14 +13,20 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Garante que pip está atualizado sem quebrar pacotes do sistema
 RUN pip3 install --upgrade pip --break-system-packages
 
-# Instala pacotes comuns de desenvolvimento
+# Conectores de banco e utilitários comuns
 RUN pip3 install \
     requests \
     python-dotenv \
     mysql-connector-python \
     psycopg2-binary \
     pymongo \
+    pytest \
+    pytest-cov \
     --break-system-packages
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

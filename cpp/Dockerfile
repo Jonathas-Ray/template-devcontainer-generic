@@ -14,8 +14,13 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# Instala PlatformIO Core CLI via pip
+# Instala PlatformIO Core CLI
 RUN pip3 install platformio --break-system-packages
 
-# Pré-aquece o cache do PlatformIO (opcional, acelera o primeiro uso)
+# Pré-aquece o cache do PlatformIO
 RUN platformio --version
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
