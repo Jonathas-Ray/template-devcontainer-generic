@@ -3,6 +3,7 @@
   "dockerComposeFile": "../docker-compose.yml",
   "service": "dev-vue-js",
   "workspaceFolder": "/workspace",
+  "runServices": ["dev-vue-js"],
   "customizations": {
     "vscode": {
       "extensions": [
