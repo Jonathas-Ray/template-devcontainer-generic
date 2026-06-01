@@ -13,9 +13,9 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Instala Maven
-RUN curl -fsSL https://downloads.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz \
+RUN curl -fsSL https://downloads.apache.org/maven/maven-3/3.9.10/binaries/apache-maven-3.9.10-bin.tar.gz \
     | tar -xz -C /opt && \
-    ln -s /opt/apache-maven-3.9.9/bin/mvn /usr/local/bin/mvn
+    ln -s /opt/apache-maven-3.9.10/bin/mvn /usr/local/bin/mvn
 
 ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 ENV PATH="$JAVA_HOME/bin:$PATH"
